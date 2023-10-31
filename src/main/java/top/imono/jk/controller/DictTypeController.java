@@ -1,6 +1,9 @@
 package top.imono.jk.controller;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import top.imono.jk.common.utils.Rs;
@@ -9,14 +12,16 @@ import top.imono.jk.pojo.query.DictTypeQuery;
 import top.imono.jk.pojo.result.R;
 import top.imono.jk.service.DictTypeService;
 
+@Tag(name = "数据字典类型", description = "查询管理数据字典类型")
 @RestController
 @RequestMapping("/dictTypes")
 public class DictTypeController extends BaseController<DictType> {
     @Autowired
     private DictTypeService service;
 
+    @Operation(summary = "查询数据字典类型", description = "管理员访问")
     @GetMapping
-    public R list(DictTypeQuery dictTypeQuery) {
+    public R list(@Parameter(description = "查询参数") DictTypeQuery dictTypeQuery) {
         service.list(dictTypeQuery);
         return Rs.success(dictTypeQuery);
 //        return new R().setSuccess(true).setContent(dictTypeQuery);
@@ -27,7 +32,13 @@ public class DictTypeController extends BaseController<DictType> {
         return service;
     }
 
-//    @PostMapping("/save")
+    @Operation(summary = "删除数据字典类型", description = "管理员访问")
+    @Override
+    public R remove(@Parameter(description = "字符串，多个id用'，'分割") String ids) {
+        return super.remove(ids);
+    }
+
+    //    @PostMapping("/save")
 //    public R save(DictType dictType) {
 //        boolean result = service.saveOrUpdate(dictType);
 //        if (result) {

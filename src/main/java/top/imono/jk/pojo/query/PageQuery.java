@@ -1,5 +1,6 @@
 package top.imono.jk.pojo.query;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.List;
@@ -8,9 +9,12 @@ import java.util.List;
 * 基本的分页查询对象
 * 可以继承该对象，增加查询功能
 * */
+@Schema(description = "分页查询参数")
 @Data
 public class PageQuery {
+    @Schema(description = "查询页码，1开始")
     private long page;
+    @Schema(description = "每页数量，默认10")
     private long size = 10;
 
     /**
