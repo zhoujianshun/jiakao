@@ -1,0 +1,27 @@
+{
+  "groups": [
+    {
+      "name": "jk",
+      "type": "top.imono.jk.common.prop.JkProperties",
+      "sourceType": "top.imono.jk.common.prop.JkProperties"
+    },
+    {
+      "name": "jk.cfg",
+      "type": "top.imono.jk.common.prop.JkProperties$Cfg",
+      "sourceType": "top.imono.jk.common.prop.JkProperties"
+    },
+    {
+      "name": "jk.properties",
+      "type": "top.imono.jk.common.prop.JkProperties",
+      "sourceType": "top.imono.jk.common.prop.JkProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "jk.cfg.cors-origins",
+      "type": "java.lang.String[]",
+      "sourceType": "top.imono.jk.common.prop.JkProperties$Cfg"
+    }
+  ],
+  "hints": []
+}

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.imono.jk.mapper.PlateRegionMapper">
+
+    <resultMap id="BaseResultMap" type="top.imono.jk.pojo.po.PlateRegion">
+            <id property="id" column="id" jdbcType="SMALLINT"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="parentId" column="parent_id" jdbcType="SMALLINT"/>
+            <result property="plate" column="plate" jdbcType="CHAR"/>
+            <result property="pinyin" column="pinyin" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,parent_id,
+        plate,pinyin
+    </sql>
+
+    <resultMap id="rmSelectRegions" type="top.imono.jk.pojo.dto.ProvinceDto">
+        <id property="id" column="id"></id>
+        <result property="name" column="name"></result>
+        <result property="plate" column="plate"></result>
+        <collection property="children" ofType="top.imono.jk.pojo.dto.CityDto">
+            <id property="id" column="city_id"></id>
+            <result property="name" column="city_name"></result>
+            <result property="plate" column="city_plate"></result>
+        </collection>
+    </resultMap>
+
+
+    <select id="selectRegions" resultMap="rmSelectRegions">
+        SELECT
+            p.id,
+            p.name,
+            p.plate,
+            c.id city_id,
+            c.name city_name,
+            c.plate city_plate
+        FROM
+            plate_region p
+                JOIN
+            plate_region c ON c.parent_id = p.id
+        WHERE
+            p.parent_id = 0
+    </select>
+</mapper>

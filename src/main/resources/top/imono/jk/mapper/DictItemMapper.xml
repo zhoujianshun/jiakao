@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.imono.jk.mapper.DictItemMapper">
+
+    <resultMap id="BaseResultMap" type="top.imono.jk.pojo.po.DictItem">
+            <id property="id" column="id" jdbcType="SMALLINT"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="value" column="value" jdbcType="VARCHAR"/>
+            <result property="sn" column="sn" jdbcType="SMALLINT"/>
+            <result property="disabled" column="disabled" jdbcType="TINYINT"/>
+            <result property="typeId" column="type_id" jdbcType="SMALLINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,value,
+        sn,disabled,type_id
+    </sql>
+</mapper>
