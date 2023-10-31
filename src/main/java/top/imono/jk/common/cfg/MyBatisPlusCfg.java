@@ -1,4 +1,4 @@
-package top.imono.jk.common.cfj;
+package top.imono.jk.common.cfg;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
