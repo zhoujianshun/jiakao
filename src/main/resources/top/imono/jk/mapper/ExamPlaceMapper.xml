@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.imono.jk.mapper.ExamPlaceMapper">
+
+    <resultMap id="BaseResultMap" type="top.imono.jk.pojo.po.ExamPlace">
+        <id property="id" column="id" jdbcType="SMALLINT"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="provinceId" column="province_id" jdbcType="SMALLINT"/>
+        <result property="cityId" column="city_id" jdbcType="SMALLINT"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="latitude" column="latitude" jdbcType="DECIMAL"/>
+        <result property="longitude" column="longitude" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,name,province_id,
+        city_id,address,latitude,
+        longitude
+    </sql>
+
+    <resultMap id="rmSelectRegionExamplePlaces" type="top.imono.jk.pojo.dto.ProvinceDto">
+        <id property="id" column="id"></id>
+        <result property="name" column="name"></result>
+        <result property="plate" column="plate"></result>
+        <collection property="children" ofType="top.imono.jk.pojo.dto.CityDto">
+            <id property="id" column="city_id"></id>
+            <result property="name" column="city_name"></result>
+            <result property="plate" column="city_plate"></result>
+            <collection property="children" ofType="top.imono.jk.pojo.dto.ExamPlaceDto">
+                <id property="id" column="e_id"></id>
+                <result property="name" column="e_name"></result>
+                <result property="address" column="e_address"></result>
+                <result property="longitude" column="e_longitude"></result>
+                <result property="latitude" column="e_latitude"></result>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <select id="selectRegionExamplePlaces" resultMap="rmSelectRegionExamplePlaces">
+        SELECT p.id,
+               p.name,
+               p.plate,
+               c.id         city_id,
+               c.name       city_name,
+               c.plate      city_plate,
+               ep.id        e_id,
+               ep.name      e_name,
+               ep.address   e_address,
+               ep.longitude e_longitude,
+               ep.latitude  e_latitude
+        FROM plate_region p
+                 JOIN
+             plate_region c ON c.parent_id = p.id
+                 JOIN exam_place ep on ep.city_id = c.id and ep.province_id = p.id
+        WHERE p.parent_id = 0
+    </select>
+</mapper>

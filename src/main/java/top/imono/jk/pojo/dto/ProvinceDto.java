@@ -9,7 +9,6 @@ public class ProvinceDto {
 
     private Integer id;
 
-
     private String name;
 
     private String plate;

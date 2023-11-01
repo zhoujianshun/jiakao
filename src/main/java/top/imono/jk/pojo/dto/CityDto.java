@@ -2,6 +2,8 @@ package top.imono.jk.pojo.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class CityDto {
 
@@ -10,4 +12,6 @@ public class CityDto {
     private String name;
 
     private String plate;
+
+    private List<ExamPlaceDto> children;
 }
