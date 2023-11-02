@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Data
 public class PageReqVo implements Serializable {
     @Parameter(description = "查询页码，1开始", example = "1")
-    private long page;
+    private long page = 1;
     @Parameter(description = "每页数量，默认10", example = "10")
     private long size = 10;
 

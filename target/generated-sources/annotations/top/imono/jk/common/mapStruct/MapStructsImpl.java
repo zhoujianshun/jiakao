@@ -4,19 +4,22 @@ import javax.annotation.processing.Generated;
 import top.imono.jk.pojo.po.DictItem;
 import top.imono.jk.pojo.po.DictType;
 import top.imono.jk.pojo.po.ExamPlace;
+import top.imono.jk.pojo.po.ExamPlaceCourse;
 import top.imono.jk.pojo.po.PlateRegion;
 import top.imono.jk.pojo.vo.req.save.DictItemReqVo;
 import top.imono.jk.pojo.vo.req.save.DictTypeReqVo;
+import top.imono.jk.pojo.vo.req.save.ExamPlaceCourseReqVo;
 import top.imono.jk.pojo.vo.req.save.ExamPlaceReqVo;
 import top.imono.jk.pojo.vo.req.save.PlateRegionReqVo;
 import top.imono.jk.pojo.vo.resp.DictItemVo;
 import top.imono.jk.pojo.vo.resp.DictTypeVo;
+import top.imono.jk.pojo.vo.resp.ExamPlaceCourseVo;
 import top.imono.jk.pojo.vo.resp.ExamPlaceVo;
 import top.imono.jk.pojo.vo.resp.PlateRegionVo;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-11-01T17:30:42+0800",
+    date = "2023-11-02T18:06:13+0800",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.5 (Oracle Corporation)"
 )
 public class MapStructsImpl implements MapStructs {
@@ -72,6 +75,27 @@ public class MapStructsImpl implements MapStructs {
         examPlace.setLongitude( reqVo.getLongitude() );
 
         return examPlace;
+    }
+
+    @Override
+    public ExamPlaceCourse reqVo2po(ExamPlaceCourseReqVo reqVo) {
+        if ( reqVo == null ) {
+            return null;
+        }
+
+        ExamPlaceCourse examPlaceCourse = new ExamPlaceCourse();
+
+        examPlaceCourse.setId( reqVo.getId() );
+        examPlaceCourse.setName( reqVo.getName() );
+        examPlaceCourse.setPrice( reqVo.getPrice() );
+        if ( reqVo.getType() != null ) {
+            examPlaceCourse.setType( reqVo.getType().intValue() );
+        }
+        examPlaceCourse.setIntro( reqVo.getIntro() );
+        examPlaceCourse.setCover( reqVo.getCover() );
+        examPlaceCourse.setPlaceId( reqVo.getPlaceId() );
+
+        return examPlaceCourse;
     }
 
     @Override
@@ -141,6 +165,29 @@ public class MapStructsImpl implements MapStructs {
         dictTypeVo.setIntro( po.getIntro() );
 
         return dictTypeVo;
+    }
+
+    @Override
+    public ExamPlaceCourseVo po2vo(ExamPlaceCourse po) {
+        if ( po == null ) {
+            return null;
+        }
+
+        ExamPlaceCourseVo examPlaceCourseVo = new ExamPlaceCourseVo();
+
+        examPlaceCourseVo.setId( po.getId() );
+        examPlaceCourseVo.setName( po.getName() );
+        examPlaceCourseVo.setPrice( po.getPrice() );
+        if ( po.getType() != null ) {
+            examPlaceCourseVo.setType( po.getType().shortValue() );
+        }
+        examPlaceCourseVo.setPlaceId( po.getPlaceId() );
+        examPlaceCourseVo.setIntro( po.getIntro() );
+        examPlaceCourseVo.setCreateTime( po.getCreateTime() );
+        examPlaceCourseVo.setVideo( po.getVideo() );
+        examPlaceCourseVo.setCover( po.getCover() );
+
+        return examPlaceCourseVo;
     }
 
     @Override

@@ -4,7 +4,7 @@ import top.imono.jk.pojo.po.DictItem;
 import com.baomidou.mybatisplus.extension.service.IService;
 import top.imono.jk.pojo.vo.req.list.DictItemPageReqVo;
 import top.imono.jk.pojo.vo.resp.DictItemVo;
-import top.imono.jk.pojo.vo.resp.json.ListJsonVo;
+import top.imono.jk.pojo.vo.resp.PageVo;
 
 /**
 * @author zhoujianshun
@@ -13,5 +13,5 @@ import top.imono.jk.pojo.vo.resp.json.ListJsonVo;
 */
 public interface DictItemService extends IService<DictItem> {
 
-    ListJsonVo<DictItemVo> list(DictItemPageReqVo dictTypeQuery);
+    PageVo<DictItemVo> list(DictItemPageReqVo dictTypeQuery);
 }

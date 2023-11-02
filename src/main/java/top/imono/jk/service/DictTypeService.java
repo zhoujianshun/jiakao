@@ -4,6 +4,7 @@ import top.imono.jk.pojo.po.DictType;
 import com.baomidou.mybatisplus.extension.service.IService;
 import top.imono.jk.pojo.vo.req.list.DictTypePageReqVo;
 import top.imono.jk.pojo.vo.resp.DictTypeVo;
+import top.imono.jk.pojo.vo.resp.PageVo;
 import top.imono.jk.pojo.vo.resp.json.ListJsonVo;
 
 /**
@@ -13,5 +14,5 @@ import top.imono.jk.pojo.vo.resp.json.ListJsonVo;
 */
 public interface DictTypeService extends IService<DictType> {
 
-    ListJsonVo<DictTypeVo> list(DictTypePageReqVo dictTypeQuery);
+    PageVo<DictTypeVo> list(DictTypePageReqVo dictTypeQuery);
 }

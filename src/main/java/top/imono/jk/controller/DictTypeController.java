@@ -10,6 +10,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import top.imono.jk.common.mapStruct.MapStructs;
+import top.imono.jk.common.utils.JsonVos;
 import top.imono.jk.pojo.po.DictType;
 import top.imono.jk.pojo.vo.req.list.DictTypePageReqVo;
 import top.imono.jk.pojo.vo.req.save.DictTypeReqVo;
@@ -28,7 +29,7 @@ public class DictTypeController extends BaseController<DictType, DictTypeReqVo> 
     @Operation(summary = "查询数据字典类型", description = "管理员访问")
     @GetMapping
     public ListJsonVo<DictTypeVo> list(@Valid DictTypePageReqVo dictTypeQuery) {
-        return service.list(dictTypeQuery);
+        return JsonVos.success(service.list(dictTypeQuery));
 //        return JsonVos.success(dictTypeQuery);
 //        return new R().setSuccess(true).setContent(dictTypeQuery);
     }

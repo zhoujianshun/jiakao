@@ -1,16 +1,15 @@
 package top.imono.jk.common.enhance;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 
 /*
  * 对Mybatis Plus的LambdaQueryWrapper功能进行增强
  * */
-public class MpQueryWrapper<T> extends QueryWrapper<T> {
+public class MpLambdaQueryWrapper<T> extends LambdaQueryWrapper<T> {
 
     @SafeVarargs
-    public final MpQueryWrapper<T> like(Object val, String ...columns) {
+    public final MpLambdaQueryWrapper<T> like(Object val, SFunction<T, ?>... funcs) {
         if (val == null) {
             return this;
         }
@@ -20,9 +19,9 @@ public class MpQueryWrapper<T> extends QueryWrapper<T> {
         }
 
         // nested方法作用时将查询条件使用括号包裹，防止最后一个or，起作用
-        return (MpQueryWrapper<T>) nested(w -> {
-            for (String column : columns) {
-                w.like(column, str).or();
+        return (MpLambdaQueryWrapper<T>) nested(w -> {
+            for (SFunction<T, ?> func : funcs) {
+                w.like(func, str).or();
             }
         });
     }

@@ -57,19 +57,19 @@
                   <option name="fileName" value="${domain.fileName}Service" />
                   <option name="fileNameWithSuffix" value="${domain.fileName}Service.java" />
                   <option name="modulePath" value="$PROJECT_DIR$" />
-                  <option name="packageName" value="top.imono.jk.service" />
+                  <option name="packageName" value="${domain.basePackage}.service" />
                 </ModuleInfoGo>
               </list>
             </option>
             <option name="needsComment" value="true" />
             <option name="needsModel" value="true" />
-            <option name="relativePackage" value="pojo" />
+            <option name="relativePackage" value="pojo.po" />
             <option name="superClass" value="" />
             <option name="tableUIInfoList">
               <list>
                 <TableUIInfo>
-                  <option name="className" value="ExamPlace" />
-                  <option name="tableName" value="exam_place" />
+                  <option name="className" value="ExamPlaceCourse" />
+                  <option name="tableName" value="exam_place_course" />
                 </TableUIInfo>
               </list>
             </option>

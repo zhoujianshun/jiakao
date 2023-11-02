@@ -42,7 +42,7 @@ public class DictItemController extends BaseController<DictItem, DictItemReqVo> 
     })
     @GetMapping
     public ListJsonVo<DictItemVo> list(@Valid DictItemPageReqVo dictTypeQuery) {
-        return service.list(dictTypeQuery);
+        return JsonVos.success(service.list(dictTypeQuery));
     }
 
 

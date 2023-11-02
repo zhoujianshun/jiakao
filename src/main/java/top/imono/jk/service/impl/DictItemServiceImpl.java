@@ -3,12 +3,12 @@ package top.imono.jk.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.transaction.annotation.Transactional;
 import top.imono.jk.common.enhance.MpPage;
-import top.imono.jk.common.enhance.MpQueryWrapper;
+import top.imono.jk.common.enhance.MpLambdaQueryWrapper;
 import top.imono.jk.common.mapStruct.MapStructs;
 import top.imono.jk.pojo.po.DictItem;
 import top.imono.jk.pojo.vo.req.list.DictItemPageReqVo;
 import top.imono.jk.pojo.vo.resp.DictItemVo;
-import top.imono.jk.pojo.vo.resp.json.ListJsonVo;
+import top.imono.jk.pojo.vo.resp.PageVo;
 import top.imono.jk.service.DictItemService;
 import top.imono.jk.mapper.DictItemMapper;
 import org.springframework.stereotype.Service;
@@ -25,8 +25,8 @@ public class DictItemServiceImpl extends ServiceImpl<DictItemMapper, DictItem>
 
     @Override
     @Transactional(readOnly = true)
-    public ListJsonVo<DictItemVo> list(DictItemPageReqVo dictTypeQuery) {
-        MpQueryWrapper<DictItem> wrapper = new MpQueryWrapper<>();
+    public PageVo<DictItemVo> list(DictItemPageReqVo dictTypeQuery) {
+        MpLambdaQueryWrapper<DictItem> wrapper = new MpLambdaQueryWrapper<>();
 
         /*对上面关键字查询进行分装*/
         wrapper.like(dictTypeQuery.getKeyword(),
@@ -41,7 +41,7 @@ public class DictItemServiceImpl extends ServiceImpl<DictItemMapper, DictItem>
         wrapper.orderByDesc(DictItem::getId);
 
         return baseMapper.selectPage(new MpPage<>(dictTypeQuery), wrapper)
-                .buildListJsonVo(MapStructs.INSTANCE::po2vo);
+                .buildPageVo(MapStructs.INSTANCE::po2vo);
     }
 }
 

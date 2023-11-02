@@ -34,7 +34,7 @@ public class PlateRegionController extends BaseController<PlateRegion, PlateRegi
 
     @GetMapping("/provinces")
     public ListJsonVo<PlateRegionVo> listProvinces(@Valid ProvincesPageReqVo provincesQuery) {
-        return service.listProvinces(provincesQuery);
+        return JsonVos.success(service.listProvinces(provincesQuery));
 //        return new R().setSuccess(true).setContent(dictTypeQuery);
     }
 

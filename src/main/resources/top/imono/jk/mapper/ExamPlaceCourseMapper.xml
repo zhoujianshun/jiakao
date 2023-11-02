@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.imono.jk.mapper.ExamPlaceCourseMapper">
+
+    <resultMap id="BaseResultMap" type="top.imono.jk.pojo.po.ExamPlaceCourse">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="price" column="price" jdbcType="DECIMAL"/>
+            <result property="type" column="type" jdbcType="TINYINT"/>
+            <result property="intro" column="intro" jdbcType="VARCHAR"/>
+            <result property="video" column="video" jdbcType="VARCHAR"/>
+            <result property="cover" column="cover" jdbcType="VARCHAR"/>
+            <result property="placeId" column="place_id" jdbcType="SMALLINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,create_time,name,
+        price,type,intro,
+        video,cover,place_id
+    </sql>
+
+    <resultMap id="rmSelect" type="top.imono.jk.pojo.vo.resp.ExamPlaceCourseVo">
+        <id property="id" column="id"></id>
+        <result property="name" column="name"></result>
+        <result property="price" column="price"></result>
+        <result property="type" column="type"></result>
+        <result property="intro" column="intro"></result>
+        <result property="video" column="video"></result>
+        <result property="placeId" column="place_id"></result>
+        <result property="provinceId" column="province_id"></result>
+        <result property="cityId" column="city_id"></result>
+        <result property="examPlaceName" column="p_name"></result>
+        <result property="address" column="address"></result>
+        <result property="city" column="city_name"></result>
+        <result property="province" column="province_name"></result>
+    </resultMap>
+
+
+    <select id="select" resultMap="rmSelect">
+        SELECT
+            c.id,
+            c.name,
+            c.price,
+            c.type,
+            c.intro,
+            c.video,
+            c.cover,
+            c.place_id,
+            p.province_id,
+            p.city_id,
+            p.name,
+            epd.c_name city_name,
+            epd.name province_name,
+            epd.address
+        FROM
+            exam_place_course c
+                JOIN
+            exam_place p on p.id = c.place_id
+                JOIN
+            (
+                SELECT
+                ep.id,
+                ep.name,
+                ep.address,
+                ep.latitude,
+                ep.longitude,
+                pi.name p_name,
+                pi.city_name c_name
+                FROM exam_place ep
+                LEFT JOIN
+                 (
+                 SELECT
+                      p.id,
+                      p.name,
+                      p.plate,
+                      c.id city_id,
+                      c.name city_name,
+                      c.plate city_plate
+                  FROM
+                      plate_region p
+                      JOIN
+                      plate_region c ON c.parent_id = p.id
+                  WHERE
+                    p.parent_id = 0
+                  ) pi
+                 ON pi.city_id = ep.city_id
+                ) epd
+        ON epd.id = p.id
+        ${ew.customSqlSegment}
+
+    </select>
+
+    <select id="tt">
+                SELECT
+            c.id,
+            c.name,
+            c.price,
+            c.type,
+            c.intro,
+            c.video,
+            c.cover,
+            c.place_id,
+            p.province_id,
+            p.city_id,
+            p.name p_name
+        FROM
+            exam_place_course c
+                JOIN
+            exam_place p on p.id = c.place_id
+            ${ew.customSqlSegment}
+    </select>
+</mapper>
