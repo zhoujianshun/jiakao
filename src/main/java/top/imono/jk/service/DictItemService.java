@@ -2,7 +2,9 @@ package top.imono.jk.service;
 
 import top.imono.jk.pojo.po.DictItem;
 import com.baomidou.mybatisplus.extension.service.IService;
-import top.imono.jk.pojo.query.DictItemQuery;
+import top.imono.jk.pojo.vo.req.list.DictItemPageReqVo;
+import top.imono.jk.pojo.vo.resp.DictItemVo;
+import top.imono.jk.pojo.vo.resp.json.ListJsonVo;
 
 /**
 * @author zhoujianshun
@@ -11,5 +13,5 @@ import top.imono.jk.pojo.query.DictItemQuery;
 */
 public interface DictItemService extends IService<DictItem> {
 
-    void list(DictItemQuery dictTypeQuery);
+    ListJsonVo<DictItemVo> list(DictItemPageReqVo dictTypeQuery);
 }

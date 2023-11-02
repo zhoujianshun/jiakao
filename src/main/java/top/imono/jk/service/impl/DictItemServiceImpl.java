@@ -2,16 +2,16 @@ package top.imono.jk.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import top.imono.jk.common.enhance.MpPage;
 import top.imono.jk.common.enhance.MpQueryWrapper;
+import top.imono.jk.common.mapStruct.MapStructs;
 import top.imono.jk.pojo.po.DictItem;
-import top.imono.jk.pojo.query.DictItemQuery;
+import top.imono.jk.pojo.vo.req.list.DictItemPageReqVo;
+import top.imono.jk.pojo.vo.resp.DictItemVo;
+import top.imono.jk.pojo.vo.resp.json.ListJsonVo;
 import top.imono.jk.service.DictItemService;
 import top.imono.jk.mapper.DictItemMapper;
 import org.springframework.stereotype.Service;
-
-import java.util.Collection;
 
 /**
  * @author zhoujianshun
@@ -25,7 +25,7 @@ public class DictItemServiceImpl extends ServiceImpl<DictItemMapper, DictItem>
 
     @Override
     @Transactional(readOnly = true)
-    public void list(DictItemQuery dictTypeQuery) {
+    public ListJsonVo<DictItemVo> list(DictItemPageReqVo dictTypeQuery) {
         MpQueryWrapper<DictItem> wrapper = new MpQueryWrapper<>();
 
         /*对上面关键字查询进行分装*/
@@ -40,9 +40,8 @@ public class DictItemServiceImpl extends ServiceImpl<DictItemMapper, DictItem>
         //        通过id排序
         wrapper.orderByDesc(DictItem::getId);
 
-
-        baseMapper.selectPage(new MpPage<>(dictTypeQuery), wrapper)
-                .updateQuery(dictTypeQuery);
+        return baseMapper.selectPage(new MpPage<>(dictTypeQuery), wrapper)
+                .buildListJsonVo(MapStructs.INSTANCE::po2vo);
     }
 }
 

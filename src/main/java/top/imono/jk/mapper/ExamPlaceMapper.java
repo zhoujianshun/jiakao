@@ -1,6 +1,6 @@
 package top.imono.jk.mapper;
 
-import top.imono.jk.pojo.dto.ProvinceDto;
+import top.imono.jk.pojo.vo.resp.ProvinceVo;
 import top.imono.jk.pojo.po.ExamPlace;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
@@ -14,7 +14,7 @@ import java.util.List;
 */
 public interface ExamPlaceMapper extends BaseMapper<ExamPlace> {
 
-    List<ProvinceDto> selectRegionExamplePlaces();
+    List<ProvinceVo> selectRegionExamplePlaces();
 }
 
 

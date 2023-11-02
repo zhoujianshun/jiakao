@@ -3,27 +3,33 @@ package top.imono.jk.controller;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import top.imono.jk.common.utils.Rs;
+import top.imono.jk.common.mapStruct.MapStructs;
 import top.imono.jk.pojo.po.DictType;
-import top.imono.jk.pojo.query.DictTypeQuery;
-import top.imono.jk.pojo.result.R;
+import top.imono.jk.pojo.vo.req.list.DictTypePageReqVo;
+import top.imono.jk.pojo.vo.req.save.DictTypeReqVo;
+import top.imono.jk.pojo.vo.resp.DictTypeVo;
+import top.imono.jk.pojo.vo.resp.json.JsonVo;
+import top.imono.jk.pojo.vo.resp.json.ListJsonVo;
 import top.imono.jk.service.DictTypeService;
 
 @Tag(name = "数据字典类型", description = "查询管理数据字典类型")
 @RestController
 @RequestMapping("/dictTypes")
-public class DictTypeController extends BaseController<DictType> {
+public class DictTypeController extends BaseController<DictType, DictTypeReqVo> {
     @Autowired
     private DictTypeService service;
 
     @Operation(summary = "查询数据字典类型", description = "管理员访问")
     @GetMapping
-    public R list(@Parameter(description = "查询参数") DictTypeQuery dictTypeQuery) {
-        service.list(dictTypeQuery);
-        return Rs.success(dictTypeQuery);
+    public ListJsonVo<DictTypeVo> list(@Valid DictTypePageReqVo dictTypeQuery) {
+        return service.list(dictTypeQuery);
+//        return JsonVos.success(dictTypeQuery);
 //        return new R().setSuccess(true).setContent(dictTypeQuery);
     }
 
@@ -32,10 +38,21 @@ public class DictTypeController extends BaseController<DictType> {
         return service;
     }
 
+    @Override
+    protected DictType getPo(DictTypeReqVo reqV) {
+        return MapStructs.INSTANCE.reqVo2po(reqV);
+    }
+
     @Operation(summary = "删除数据字典类型", description = "管理员访问")
     @Override
-    public R remove(@Parameter(description = "字符串，多个id用'，'分割") String ids) {
+    public JsonVo remove(@Parameter(description = "字符串，多个id用'，'分割") String ids) {
         return super.remove(ids);
+    }
+
+    @Operation(summary = "添加或保存数据字典类型", description = "管理员访问")
+    @Override
+    public JsonVo save(@Parameter(description = "字典类型参数") DictTypeReqVo item) {
+        return super.save(item);
     }
 
     //    @PostMapping("/save")

@@ -21,15 +21,15 @@
         longitude
     </sql>
 
-    <resultMap id="rmSelectRegionExamplePlaces" type="top.imono.jk.pojo.dto.ProvinceDto">
+    <resultMap id="rmSelectRegionExamplePlaces" type="top.imono.jk.pojo.vo.resp.ProvinceVo">
         <id property="id" column="id"></id>
         <result property="name" column="name"></result>
         <result property="plate" column="plate"></result>
-        <collection property="children" ofType="top.imono.jk.pojo.dto.CityDto">
+        <collection property="children" ofType="top.imono.jk.pojo.vo.resp.CityVo">
             <id property="id" column="city_id"></id>
             <result property="name" column="city_name"></result>
             <result property="plate" column="city_plate"></result>
-            <collection property="children" ofType="top.imono.jk.pojo.dto.ExamPlaceDto">
+            <collection property="children" ofType="top.imono.jk.pojo.vo.resp.ExamPlaceVo">
                 <id property="id" column="e_id"></id>
                 <result property="name" column="e_name"></result>
                 <result property="address" column="e_address"></result>

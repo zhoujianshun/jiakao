@@ -2,9 +2,9 @@ package top.imono.jk.service;
 
 import top.imono.jk.pojo.po.DictType;
 import com.baomidou.mybatisplus.extension.service.IService;
-import top.imono.jk.pojo.query.DictTypeQuery;
-
-import java.util.List;
+import top.imono.jk.pojo.vo.req.list.DictTypePageReqVo;
+import top.imono.jk.pojo.vo.resp.DictTypeVo;
+import top.imono.jk.pojo.vo.resp.json.ListJsonVo;
 
 /**
 * @author zhoujianshun
@@ -13,5 +13,5 @@ import java.util.List;
 */
 public interface DictTypeService extends IService<DictType> {
 
-    void list(DictTypeQuery dictTypeQuery);
+    ListJsonVo<DictTypeVo> list(DictTypePageReqVo dictTypeQuery);
 }

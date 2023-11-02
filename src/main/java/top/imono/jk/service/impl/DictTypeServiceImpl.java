@@ -4,8 +4,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.transaction.annotation.Transactional;
 import top.imono.jk.common.enhance.MpPage;
 import top.imono.jk.common.enhance.MpQueryWrapper;
+import top.imono.jk.common.mapStruct.MapStructs;
 import top.imono.jk.pojo.po.DictType;
-import top.imono.jk.pojo.query.DictTypeQuery;
+import top.imono.jk.pojo.vo.req.list.DictTypePageReqVo;
+import top.imono.jk.pojo.vo.resp.DictTypeVo;
+import top.imono.jk.pojo.vo.resp.json.ListJsonVo;
 import top.imono.jk.service.DictTypeService;
 import top.imono.jk.mapper.DictTypeMapper;
 import org.springframework.stereotype.Service;
@@ -23,7 +26,7 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, DictType>
 
     @Override
     @Transactional(readOnly = true)
-    public void list(DictTypeQuery dictTypeQuery) {
+    public ListJsonVo<DictTypeVo> list(DictTypePageReqVo dictTypeQuery) {
         MpQueryWrapper<DictType> wrapper = new MpQueryWrapper<>();
 //        String keyword = dictTypeQuery.getKeyword();
 //        if (StringUtils.hasLength(keyword)) {
@@ -42,8 +45,8 @@ public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, DictType>
 //        mapper.selectPage(page, wrapper);
 //        page.updateQuery(dictTypeQuery);
 //        简化写法，等同于上面三行
-        baseMapper.selectPage(new MpPage<>(dictTypeQuery), wrapper)
-                .updateQuery(dictTypeQuery);
+        return baseMapper.selectPage(new MpPage<>(dictTypeQuery), wrapper)
+                .buildListJsonVo(MapStructs.INSTANCE::po2vo);
     }
 
 

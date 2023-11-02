@@ -23,7 +23,7 @@ import top.imono.jk.common.foreign.anno.ForeignField;
 import top.imono.jk.common.foreign.info.ForeignFieldInfo;
 import top.imono.jk.common.foreign.info.ForeignTableInfo;
 import top.imono.jk.common.utils.Classes;
-import top.imono.jk.common.utils.Rs;
+import top.imono.jk.common.utils.JsonVos;
 import top.imono.jk.common.utils.Strings;
 
 import java.lang.reflect.Field;
@@ -80,7 +80,7 @@ public class ForeignAspect implements InitializingBean {
             if (mainField.getCascade() == ForeignCascade.DEFAULT) { // 默认
                 Long count = mapper.selectCount(wrapper);
                 if (count == 0) continue;
-                Rs.raise(String.format("有%d条【%s】数据相关联，无法删除！", count, subTable.getTable()));
+                JsonVos.raise(String.format("有%d条【%s】数据相关联，无法删除！", count, subTable.getTable()));
             } else { // 删除关联数据
                 mapper.delete(wrapper);
             }
@@ -127,7 +127,7 @@ public class ForeignAspect implements InitializingBean {
             QueryWrapper<Class<?>> wrapper = new QueryWrapper<>();
             wrapper.eq(mainField.getColumn(), subValue);
             if (mapper.selectCount(wrapper) == 0) {
-                Rs.raise(String.format("%s=%s不存在", subField.getColumn(), subValue));
+                JsonVos.raise(String.format("%s=%s不存在", subField.getColumn(), subValue));
             }
         }
         return point.proceed();
@@ -139,7 +139,7 @@ public class ForeignAspect implements InitializingBean {
         Resource[] rs = resolver.getResources(FOREIGN_SCAN);
         if (rs.length == 0) {
 //            return;
-            Rs.raise("FOREIGN_SCAN配置错误，找不到任何类信息");
+            JsonVos.raise("FOREIGN_SCAN配置错误，找不到任何类信息");
         }
 
         MetadataReaderFactory readerFactory = new CachingMetadataReaderFactory(resourceLoader);

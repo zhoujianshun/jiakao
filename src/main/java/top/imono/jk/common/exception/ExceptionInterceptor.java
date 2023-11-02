@@ -1,13 +1,12 @@
 package top.imono.jk.common.exception;
 
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import top.imono.jk.pojo.result.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import top.imono.jk.common.utils.Rs;
+import top.imono.jk.common.utils.JsonVos;
+import top.imono.jk.pojo.vo.resp.json.JsonVo;
 
 
 /*
@@ -19,11 +18,11 @@ public class ExceptionInterceptor {
 
     @ExceptionHandler(Throwable.class)
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
-    public R handle(Throwable t) {
+    public JsonVo handle(Throwable t) {
 //        System.out.println(t.toString());
         // 设置返回数据格式
         log.error("ExceptionInterceptor handle", t);
-        return Rs.error(t);
+        return JsonVos.error(t);
     }
 
 //    @ExceptionHandler(Throwable.class)

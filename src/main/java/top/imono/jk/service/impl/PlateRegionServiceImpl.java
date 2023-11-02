@@ -3,10 +3,12 @@ package top.imono.jk.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import top.imono.jk.common.enhance.MpPage;
 import top.imono.jk.common.enhance.MpQueryWrapper;
-import top.imono.jk.pojo.dto.ProvinceDto;
-import top.imono.jk.pojo.po.DictItem;
+import top.imono.jk.common.mapStruct.MapStructs;
+import top.imono.jk.pojo.vo.resp.PlateRegionVo;
+import top.imono.jk.pojo.vo.resp.ProvinceVo;
 import top.imono.jk.pojo.po.PlateRegion;
-import top.imono.jk.pojo.query.ProvincesQuery;
+import top.imono.jk.pojo.vo.req.list.ProvincesPageReqVo;
+import top.imono.jk.pojo.vo.resp.json.ListJsonVo;
 import top.imono.jk.service.PlateRegionService;
 import top.imono.jk.mapper.PlateRegionMapper;
 import org.springframework.stereotype.Service;
@@ -23,7 +25,7 @@ public class PlateRegionServiceImpl extends ServiceImpl<PlateRegionMapper, Plate
     implements PlateRegionService{
 
     @Override
-    public void listProvinces(ProvincesQuery provincesQuery) {
+    public ListJsonVo<PlateRegionVo> listProvinces(ProvincesPageReqVo provincesQuery) {
         MpQueryWrapper<PlateRegion> wrapper = new MpQueryWrapper<>();
 
         /*对上面关键字查询进行分装*/
@@ -34,12 +36,12 @@ public class PlateRegionServiceImpl extends ServiceImpl<PlateRegionMapper, Plate
         //        通过id排序
         wrapper.orderByDesc(PlateRegion::getId);
 
-        baseMapper.selectPage(new MpPage<>(provincesQuery), wrapper)
-                .updateQuery(provincesQuery);
+        return baseMapper.selectPage(new MpPage<>(provincesQuery), wrapper)
+                .buildListJsonVo(MapStructs.INSTANCE::po2vo);
     }
 
     @Override
-    public List<ProvinceDto> listRegions() {
+    public List<ProvinceVo> listRegions() {
         return baseMapper.selectRegions();
     }
 }

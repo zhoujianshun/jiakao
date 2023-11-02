@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
@@ -26,14 +25,12 @@ public class DictType implements Serializable {
      * 名称
      */
     @TableField(value = "name")
-    @NotBlank(message = "名称不能为空")
     private String name;
 
     /**
      * 值
      */
     @TableField(value = "value")
-    @NotBlank(message = "值不能为空")
     private String value;
 
     /**
