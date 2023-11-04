@@ -1,6 +1,9 @@
 package top.imono.jk.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import top.imono.jk.common.enhance.MpLambdaQueryWrapper;
 import top.imono.jk.common.mapStruct.MapStructs;
 import top.imono.jk.common.utils.JsonVos;
@@ -12,18 +15,26 @@ import top.imono.jk.service.SysUserService;
 import top.imono.jk.mapper.SysUserMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.Date;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
 import top.imono.jk.common.utils.Constants;
 
 /**
-* @author zhoujianshun
-* @description 针对表【sys_user(用户（可以登录后台系统的）)】的数据库操作Service实现
-* @createDate 2023-11-04 13:07:48
-*/
+ * @author zhoujianshun
+ * @description 针对表【sys_user(用户（可以登录后台系统的）)】的数据库操作Service实现
+ * @createDate 2023-11-04 13:07:48
+ */
 @Service
-public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
-    implements SysUserService{
+@Slf4j
+public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+    @Autowired
+    private RedisTemplate<String, String> stringRedisTemplate;
 
     @Override
     public LoginVo login(LoginReqVo loginReqVo) {
@@ -49,6 +60,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
         String token = UUID.randomUUID().toString();
 
         // 放入缓存
+        redisTemplate.boundValueOps("token_" + user.getUsername()).set(token, 1, TimeUnit.MINUTES);
+        redisTemplate.boundValueOps("user_" + user.getId()).set(user, 1, TimeUnit.MINUTES);
+        String test = stringRedisTemplate.boundValueOps("test").get();
+        log.debug(test + "");
+
 //        EhCaches.tokenPut(token, user);
         LoginVo vo = MapStructs.INSTANCE.po2loginVo(user);
         vo.setToken(token);
