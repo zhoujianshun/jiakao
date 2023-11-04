@@ -38,5 +38,5 @@ public interface MapStructs {
 //            target = "loginTime",
 //            qualifiedBy = Date2Millis.class)
 //    SysUserVo po2vo(SysUser po);
-//    LoginVo po2loginVo(SysUser po);
+    LoginVo po2loginVo(SysUser po);
 }

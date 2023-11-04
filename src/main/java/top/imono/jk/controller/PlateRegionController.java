@@ -1,6 +1,7 @@
 package top.imono.jk.controller;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/plateRegions")
+@Tag(name = "驾照区域", description = "查询驾照区域")
 public class PlateRegionController extends BaseController<PlateRegion, PlateRegionReqVo> {
     @Autowired
     private PlateRegionService service;

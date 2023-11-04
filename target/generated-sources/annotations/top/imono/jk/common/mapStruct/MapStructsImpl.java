@@ -6,6 +6,7 @@ import top.imono.jk.pojo.po.DictType;
 import top.imono.jk.pojo.po.ExamPlace;
 import top.imono.jk.pojo.po.ExamPlaceCourse;
 import top.imono.jk.pojo.po.PlateRegion;
+import top.imono.jk.pojo.po.SysUser;
 import top.imono.jk.pojo.vo.req.save.DictItemReqVo;
 import top.imono.jk.pojo.vo.req.save.DictTypeReqVo;
 import top.imono.jk.pojo.vo.req.save.ExamPlaceCourseReqVo;
@@ -15,11 +16,12 @@ import top.imono.jk.pojo.vo.resp.DictItemVo;
 import top.imono.jk.pojo.vo.resp.DictTypeVo;
 import top.imono.jk.pojo.vo.resp.ExamPlaceCourseVo;
 import top.imono.jk.pojo.vo.resp.ExamPlaceVo;
+import top.imono.jk.pojo.vo.resp.LoginVo;
 import top.imono.jk.pojo.vo.resp.PlateRegionVo;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-11-02T18:06:13+0800",
+    date = "2023-11-04T13:49:14+0800",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.5 (Oracle Corporation)"
 )
 public class MapStructsImpl implements MapStructs {
@@ -204,5 +206,20 @@ public class MapStructsImpl implements MapStructs {
         plateRegionVo.setPlate( po.getPlate() );
 
         return plateRegionVo;
+    }
+
+    @Override
+    public LoginVo po2loginVo(SysUser po) {
+        if ( po == null ) {
+            return null;
+        }
+
+        LoginVo loginVo = new LoginVo();
+
+        loginVo.setId( po.getId() );
+        loginVo.setUsername( po.getUsername() );
+        loginVo.setNickname( po.getNickname() );
+
+        return loginVo;
     }
 }
