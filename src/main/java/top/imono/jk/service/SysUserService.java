@@ -1,5 +1,6 @@
 package top.imono.jk.service;
 
+import jakarta.servlet.http.HttpServletResponse;
 import top.imono.jk.pojo.po.SysUser;
 import com.baomidou.mybatisplus.extension.service.IService;
 import top.imono.jk.pojo.vo.req.LoginReqVo;
@@ -11,5 +12,5 @@ import top.imono.jk.pojo.vo.resp.LoginVo;
 * @createDate 2023-11-04 13:07:48
 */
 public interface SysUserService extends IService<SysUser> {
-    LoginVo login(LoginReqVo loginVo);
+    LoginVo login(LoginReqVo loginVo, HttpServletResponse response);
 }

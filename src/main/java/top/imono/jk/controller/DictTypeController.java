@@ -3,10 +3,9 @@ package top.imono.jk.controller;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import top.imono.jk.common.mapStruct.MapStructs;
@@ -26,7 +25,7 @@ public class DictTypeController extends BaseController<DictType, DictTypeReqVo> 
     @Autowired
     private DictTypeService service;
 
-    @Operation(summary = "查询数据字典类型", description = "管理员访问")
+    @Operation(summary = "查询数据字典类型", description = "管理员访问", security = @SecurityRequirement(name = "authScheme"))
     @GetMapping
     public ListJsonVo<DictTypeVo> list(@Valid DictTypePageReqVo dictTypeQuery) {
         return JsonVos.success(service.list(dictTypeQuery));

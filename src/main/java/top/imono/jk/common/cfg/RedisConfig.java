@@ -9,6 +9,8 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 @Configuration
 public class RedisConfig {
 
+
+
     @Bean("redisTemplate")
     public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
         RedisTemplate<String,Object> redisTemplate = new RedisTemplate<>();
@@ -26,16 +28,16 @@ public class RedisConfig {
         return redisTemplate;
     }
 
-    @Bean("stringRedisTemplate")
-    public RedisTemplate<String, String> stringRedisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
-        RedisTemplate<String,String> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(lettuceConnectionFactory);
-        // 设置key序列化方式string，RedisSerializer.string() 等价于 new StringRedisSerializer()
-        redisTemplate.setKeySerializer(RedisSerializer.string());
-        // 设置hash的key的序列化方式
-        redisTemplate.setHashKeySerializer(RedisSerializer.string());
-        // 使配置生效
-        redisTemplate.afterPropertiesSet();
-        return redisTemplate;
-    }
+//    @Bean("stringRedisTemplate")
+//    public RedisTemplate<String, String> stringRedisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
+//        RedisTemplate<String,String> redisTemplate = new RedisTemplate<>();
+//        redisTemplate.setConnectionFactory(lettuceConnectionFactory);
+//        // 设置key序列化方式string，RedisSerializer.string() 等价于 new StringRedisSerializer()
+//        redisTemplate.setKeySerializer(RedisSerializer.string());
+//        // 设置hash的key的序列化方式
+//        redisTemplate.setHashKeySerializer(RedisSerializer.string());
+//        // 使配置生效
+//        redisTemplate.afterPropertiesSet();
+//        return redisTemplate;
+//    }
 }

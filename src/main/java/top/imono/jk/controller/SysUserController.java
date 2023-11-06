@@ -1,8 +1,10 @@
 package top.imono.jk.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,9 +26,10 @@ public class SysUserController{
     private SysUserService service;
 
     @PostMapping("/login")
+    @SecurityRequirements() // 设置文档中不需要auth验证
     @Operation(summary = "登录")
-    public DataJsonVo<LoginVo> login(@Valid LoginReqVo loginVo, HttpServletRequest request) {
-        return JsonVos.success(service.login(loginVo));
+    public DataJsonVo<LoginVo> login(@Valid LoginReqVo loginVo, HttpServletRequest request, HttpServletResponse response) {
+        return JsonVos.success(service.login(loginVo, response));
     }
 
 }

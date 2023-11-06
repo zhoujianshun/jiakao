@@ -25,34 +25,42 @@ public class JsonVos {
         return new JsonVo(false, msg);
     }
 
+    public static JsonVo error(CodeMsg codeMsg) {
+        return new JsonVo(codeMsg);
+    }
+
     public static JsonVo error() {
         return new JsonVo(false);
     }
 
-    public static JsonVo error(Throwable t) {
-        if (t instanceof CommonException e) {
-            JsonVo r = new JsonVo(false);
-            r.setMsg(e.getMessage());
-            r.setCode(e.getCode());
-            return r;
-        }else if (t instanceof BindException be) {
-            JsonVo r = new JsonVo(false);
-            List<ObjectError> allErrors = be.getBindingResult().getAllErrors();
-            List<String> defaultMsg = allErrors.stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toList();
-            String msg = StringUtils.collectionToDelimitedString(defaultMsg, ",");
-            r.setMsg(msg);
-            return r;
-        } else if (t instanceof ConstraintViolationException cve) {
-            JsonVo r = new JsonVo(false);
-            List<String> defaultMsg =  cve.getConstraintViolations().stream().map(ConstraintViolation::getMessage).toList();
-            String msg = StringUtils.collectionToDelimitedString(defaultMsg, ",");
-            r.setMsg(msg);
-            return r;
-        } else {
-//            return error();
-            return error(t.getMessage());
-        }
+    public static JsonVo error(Integer code,String msg) {
+        return new JsonVo(code, msg);
     }
+
+//    public static JsonVo error(Throwable t) {
+//        if (t instanceof CommonException e) {
+//            JsonVo r = new JsonVo(false);
+//            r.setMsg(e.getMessage());
+//            r.setCode(e.getCode());
+//            return r;
+//        }else if (t instanceof BindException be) {
+//            JsonVo r = new JsonVo(false);
+//            List<ObjectError> allErrors = be.getBindingResult().getAllErrors();
+//            List<String> defaultMsg = allErrors.stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toList();
+//            String msg = StringUtils.collectionToDelimitedString(defaultMsg, ",");
+//            r.setMsg(msg);
+//            return r;
+//        } else if (t instanceof ConstraintViolationException cve) {
+//            JsonVo r = new JsonVo(false);
+//            List<String> defaultMsg =  cve.getConstraintViolations().stream().map(ConstraintViolation::getMessage).toList();
+//            String msg = StringUtils.collectionToDelimitedString(defaultMsg, ",");
+//            r.setMsg(msg);
+//            return r;
+//        } else {
+////            return error();
+//            return error(t.getMessage());
+//        }
+//    }
 
     public static <T> DataJsonVo<T> success(T data) {
         return new DataJsonVo<>(data);

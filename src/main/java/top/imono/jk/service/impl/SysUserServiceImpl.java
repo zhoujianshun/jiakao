@@ -1,10 +1,12 @@
 package top.imono.jk.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import top.imono.jk.common.enhance.MpLambdaQueryWrapper;
+import top.imono.jk.common.jwt.JwtUtil;
 import top.imono.jk.common.mapStruct.MapStructs;
 import top.imono.jk.common.utils.JsonVos;
 import top.imono.jk.pojo.po.SysUser;
@@ -30,14 +32,15 @@ import top.imono.jk.common.utils.Constants;
 @Service
 @Slf4j
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
-
+    @Autowired
+    private JwtUtil jwtUtil;
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
     @Autowired
     private RedisTemplate<String, String> stringRedisTemplate;
 
     @Override
-    public LoginVo login(LoginReqVo loginReqVo) {
+    public LoginVo login(LoginReqVo loginReqVo, HttpServletResponse response) {
         MpLambdaQueryWrapper<SysUser> wrapper = new MpLambdaQueryWrapper<>();
         wrapper.eq(SysUser::getUsername, loginReqVo.getUsername());
 
@@ -57,13 +60,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         baseMapper.updateById(user);
 
         // 生成token
-        String token = UUID.randomUUID().toString();
-
+        String token = jwtUtil.generateToken(user.getUsername(), user.getId().toString());
+        response.setHeader(JwtUtil.HEADER, token);
+        response.setHeader("Access-control-Expost-Headers", JwtUtil.HEADER);
         // 放入缓存
-        redisTemplate.boundValueOps("token_" + user.getUsername()).set(token, 1, TimeUnit.MINUTES);
-        redisTemplate.boundValueOps("user_" + user.getId()).set(user, 1, TimeUnit.MINUTES);
-        String test = stringRedisTemplate.boundValueOps("test").get();
-        log.debug(test + "");
+        stringRedisTemplate.boundValueOps("token_" + user.getId()).set(token, 10, TimeUnit.MINUTES);
+//        redisTemplate.boundValueOps("user_" + user.getId()).set(user, 1, TimeUnit.MINUTES);
+//        String test = stringRedisTemplate.boundValueOps("test").get();
+//        log.debug(test + "");
 
 //        EhCaches.tokenPut(token, user);
         LoginVo vo = MapStructs.INSTANCE.po2loginVo(user);

@@ -21,9 +21,11 @@ public enum CodeMsg {
     USER_LOCKED(50003, "用户被锁定，无法正常登录"),
     WRONG_CAPTCHA(50004, "验证码错误"),
 
-    NO_TOKEN(60001, "没有Token，请登录"),
-    TOKEN_EXPIRED(60002, "Token过期，请重新登录"),
-    NO_PERMISSION(60003, "没有相关的操作权限");
+    NO_TOKEN(401, "没有Token，请登录"),
+    TOKEN_EXPIRED(401, "Token过期，请重新登录"),
+    NO_PERMISSION(403, "没有相关的操作权限"),
+    LOGIN_OTHER_DEVICE(401, "在已其他设备上登录了"),
+    TOKEN_INVALID(401, "无效的Token，请重新登录");
 
     private final int code;
     private final String msg;

@@ -15,6 +15,7 @@ import java.util.List;
 public interface ExamPlaceMapper extends BaseMapper<ExamPlace> {
 
     List<ProvinceVo> selectRegionExamplePlaces();
+
 }
 
 
