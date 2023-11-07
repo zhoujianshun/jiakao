@@ -4,12 +4,10 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import top.imono.jk.common.utils.JsonVos;
@@ -19,14 +17,13 @@ import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Map;
 
 @Component
 @Slf4j
 public class JwtUtil {
     private static final String SECRET = "zxcvbnmfdasaererafafafafafafakjlkjalkfafadffdafadfafafaaa234567908fadfadfaf3";
-    private static final long EXPIRE = 60 * 24 * 7 + 1;
+    public static final long EXPIRE = 60 * 24 * 7; // 有效期7天
     public static final String HEADER = "Authorization";
     public static final String PREFIX = "Bearer";
 

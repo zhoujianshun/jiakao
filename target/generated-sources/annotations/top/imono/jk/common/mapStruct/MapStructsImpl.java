@@ -21,7 +21,7 @@ import top.imono.jk.pojo.vo.resp.PlateRegionVo;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-11-06T17:15:54+0800",
+    date = "2023-11-06T18:12:34+0800",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.5 (Oracle Corporation)"
 )
 public class MapStructsImpl implements MapStructs {

@@ -9,10 +9,12 @@ public enum CodeMsg {
 
     OPERATE_OK(20000, "操作成功"),
     SAVE_OK(20000, "保存成功"),
+    ADD_OK(20000, "添加成功"),
     REMOVE_OK(20000, "删除成功"),
 
     OPERATE_ERROR(40001, "操作失败"),
     SAVE_ERROR(40002, "保存失败"),
+    ADD_ERROR(40002, "添加失败"),
     REMOVE_ERROR(40003, "删除失败"),
     UPLOAD_IMG_ERROR(40004, "图片上传失败"),
 

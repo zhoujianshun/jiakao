@@ -6,11 +6,13 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import top.imono.jk.common.mapStruct.MapStructs;
 import top.imono.jk.common.utils.JsonVos;
 import top.imono.jk.pojo.po.DictType;
+import top.imono.jk.pojo.result.CodeMsg;
 import top.imono.jk.pojo.vo.req.list.DictTypePageReqVo;
 import top.imono.jk.pojo.vo.req.save.DictTypeReqVo;
 import top.imono.jk.pojo.vo.resp.DictTypeVo;
@@ -33,6 +35,29 @@ public class DictTypeController extends BaseController<DictType, DictTypeReqVo> 
 //        return new R().setSuccess(true).setContent(dictTypeQuery);
     }
 
+    @Operation(summary = "添加")
+    @PostMapping
+    public JsonVo create(@Valid DictTypeReqVo item) {
+        boolean result = getService().saveOrUpdate(getPo(item));
+        if (result) {
+            return JsonVos.success(CodeMsg.ADD_OK);
+        }
+        // 使用统一错误处理
+        return JsonVos.raise(CodeMsg.ADD_ERROR);
+    }
+
+    @Operation(summary = "更新")
+    @PutMapping(value = "/{id}")
+    public JsonVo update(@Parameter(description = "id") @PathVariable Integer id, @Valid DictTypeReqVo item) {
+        item.setId(id);
+        boolean result = getService().saveOrUpdate(getPo(item));
+        if (result) {
+            return JsonVos.success(CodeMsg.SAVE_OK);
+        }
+        // 使用统一错误处理
+        return JsonVos.raise(CodeMsg.SAVE_ERROR);
+    }
+
     @Override
     protected IService<DictType> getService() {
         return service;
@@ -43,17 +68,17 @@ public class DictTypeController extends BaseController<DictType, DictTypeReqVo> 
         return MapStructs.INSTANCE.reqVo2po(reqV);
     }
 
-    @Operation(summary = "删除数据字典类型", description = "管理员访问")
-    @Override
-    public JsonVo remove(@Parameter(description = "字符串，多个id用'，'分割") String ids) {
-        return super.remove(ids);
-    }
+//    @Operation(summary = "删除数据字典类型", description = "管理员访问")
+//    @Override
+//    public JsonVo remove(@Parameter(description = "字符串，多个id用'，'分割") String ids) {
+//        return super.remove(ids);
+//    }
 
-    @Operation(summary = "添加或保存数据字典类型", description = "管理员访问")
-    @Override
-    public JsonVo save(@Parameter(description = "字典类型参数") DictTypeReqVo item) {
-        return super.save(item);
-    }
+//    @Operation(summary = "添加或保存数据字典类型", description = "管理员访问")
+//    @Override
+//    public JsonVo save(@Parameter(description = "字典类型参数") DictTypeReqVo item) {
+//        return super.save(item);
+//    }
 
     //    @PostMapping("/save")
 //    public R save(DictType dictType) {

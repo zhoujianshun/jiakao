@@ -64,7 +64,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         response.setHeader(JwtUtil.HEADER, token);
         response.setHeader("Access-control-Expost-Headers", JwtUtil.HEADER);
         // 放入缓存
-        stringRedisTemplate.boundValueOps("token_" + user.getId()).set(token, 10, TimeUnit.MINUTES);
+        stringRedisTemplate.boundValueOps("token_" + user.getId()).set(token, JwtUtil.EXPIRE, TimeUnit.MINUTES);
 //        redisTemplate.boundValueOps("user_" + user.getId()).set(user, 1, TimeUnit.MINUTES);
 //        String test = stringRedisTemplate.boundValueOps("test").get();
 //        log.debug(test + "");
