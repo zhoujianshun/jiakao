@@ -8,8 +8,10 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import top.imono.jk.common.exception.CommonException;
 import top.imono.jk.common.utils.JsonVos;
 import top.imono.jk.pojo.result.CodeMsg;
 
@@ -111,7 +113,7 @@ public class JwtUtil {
     public static void main(String[] args) {
         JwtUtil jwtUtil = new JwtUtil();
         String token = jwtUtil.generateToken("admin", "222");
-            token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2OTkyNDI2NjUsInN1YiI6InVzZXIiLCJ4eCI6IjExMSIsImV4cCI6MTY5OTI0MjcyNSwidXNlcm5hbWUiOiJhZG1pbiIsImlkIjoiMSJ9.u-kRFt2cWxHOqbmaxKG8f2e6IgeLbudO6J0aO65q5SLU7gaL2myRR9-0t7zKD09DeRV8NdlP4UaFQ_ltgqy8yA";
+        token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2OTkyNDI2NjUsInN1YiI6InVzZXIiLCJ4eCI6IjExMSIsImV4cCI6MTY5OTI0MjcyNSwidXNlcm5hbWUiOiJhZG1pbiIsImlkIjoiMSJ9.u-kRFt2cWxHOqbmaxKG8f2e6IgeLbudO6J0aO65q5SLU7gaL2myRR9-0t7zKD09DeRV8NdlP4UaFQ_ltgqy8yA";
         // token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2OTkyNDI3ODcsInN1YiI6InVzZXIiLCJ4eCI6IjExMSIsImV4cCI6MTY5OTg0NzY0NywidXNlcm5hbWUiOiJhZG1pbiIsImlkIjoiMSJ9.g1Xi-zkRSktD814cI2zehPS0SEpRgEjOijvi8qbfwpOuKAW4aK8Ank5xZqSZ-5Z3FIXudvybCd5kkKS0DJRrSA";
         System.out.println("token = " + token);
 
@@ -125,5 +127,14 @@ public class JwtUtil {
 //        System.out.println("id = " + claims.get("id") + ' ' + claims.getId());
         System.out.println("isVerify = " + jwtUtil.isVerify(token));
 
+    }
+
+
+    public static String getTokenFromRequest(HttpServletRequest request) {
+        String authHeader = request.getHeader(JwtUtil.HEADER);
+        if (authHeader == null || authHeader.length() <= JwtUtil.PREFIX.length()) {
+            return null;
+        }
+        return authHeader.substring(JwtUtil.PREFIX.length() + 1);
     }
 }

@@ -1,35 +1,44 @@
 package top.imono.jk.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import top.imono.jk.common.utils.JsonVos;
-import top.imono.jk.pojo.vo.req.LoginReqVo;
-import top.imono.jk.pojo.vo.resp.LoginVo;
-import top.imono.jk.pojo.vo.resp.json.DataJsonVo;
+import top.imono.jk.pojo.result.CodeMsg;
+import top.imono.jk.pojo.vo.req.list.SysUserPageReqVo;
+import top.imono.jk.pojo.vo.resp.SysUserVo;
+import top.imono.jk.pojo.vo.resp.json.JsonVo;
+import top.imono.jk.pojo.vo.resp.json.ListJsonVo;
 import top.imono.jk.service.SysUserService;
 
+import java.util.Arrays;
+
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/sysUsers")
 @Tag(name = "用户相关")
-public class SysUserController{
+public class SysUserController {
 
     @Autowired
     private SysUserService service;
 
-    @PostMapping("/login")
-    @SecurityRequirements() // 设置文档中不需要auth验证
-    @Operation(summary = "登录")
-    public DataJsonVo<LoginVo> login(@Valid LoginReqVo loginVo, HttpServletRequest request, HttpServletResponse response) {
-        return JsonVos.success(service.login(loginVo, response));
+    @GetMapping
+    @Operation(description = "分页查询用户")
+//    @RequiresPermissions(Constants.Permisson.SYS_USER_LIST)
+    public ListJsonVo<SysUserVo> list(SysUserPageReqVo reqVo) {
+        return JsonVos.success(service.list(reqVo));
     }
 
+    @Operation(summary = "删除")
+    @DeleteMapping("/{ids}")
+    public JsonVo delete(@Parameter(description = "需要删除的id，多个id可以使用','隔开") @PathVariable String ids) {
+        boolean result = service.removeByIds(Arrays.stream(ids.split(",")).toList());
+        if (result) {
+            return JsonVos.success(CodeMsg.REMOVE_OK);
+        }
+        return JsonVos.raise(CodeMsg.REMOVE_ERROR);
+    }
 }

@@ -1,18 +1,25 @@
 package top.imono.jk.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.util.StringUtils;
 import top.imono.jk.common.enhance.MpLambdaQueryWrapper;
+import top.imono.jk.common.enhance.MpPage;
 import top.imono.jk.common.jwt.JwtUtil;
 import top.imono.jk.common.mapStruct.MapStructs;
 import top.imono.jk.common.utils.JsonVos;
+import top.imono.jk.pojo.po.DictItem;
 import top.imono.jk.pojo.po.SysUser;
 import top.imono.jk.pojo.result.CodeMsg;
 import top.imono.jk.pojo.vo.req.LoginReqVo;
+import top.imono.jk.pojo.vo.req.list.SysUserPageReqVo;
 import top.imono.jk.pojo.vo.resp.LoginVo;
+import top.imono.jk.pojo.vo.resp.PageVo;
+import top.imono.jk.pojo.vo.resp.SysUserVo;
 import top.imono.jk.service.SysUserService;
 import top.imono.jk.mapper.SysUserMapper;
 import org.springframework.stereotype.Service;
@@ -73,6 +80,34 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         LoginVo vo = MapStructs.INSTANCE.po2loginVo(user);
         vo.setToken(token);
         return vo;
+    }
+
+    @Override
+    public Boolean logout(HttpServletRequest request) {
+        String token = JwtUtil.getTokenFromRequest(request);
+        if (!StringUtils.hasLength(token)) {
+            return JsonVos.raise(CodeMsg.NO_TOKEN);
+        }
+        String userId = jwtUtil.getClaimFiled(token, "id");
+        if (userId == null) {
+            return JsonVos.raise(CodeMsg.BAD_REQUEST);
+        }
+        stringRedisTemplate.delete("token_" + userId);
+        return true;
+    }
+
+    @Override
+    public PageVo<SysUserVo> list(SysUserPageReqVo reqVo) {
+        MpLambdaQueryWrapper<SysUser> wrapper = new MpLambdaQueryWrapper<>();
+        /*对上面关键字查询进行分装*/
+        wrapper.like(reqVo.getKeyword(),
+                SysUser::getNickname,
+                SysUser::getUsername);
+        //        通过id排序
+        wrapper.orderByDesc(SysUser::getId);
+
+        return baseMapper.selectPage(new MpPage<>(reqVo), wrapper)
+                .buildPageVo(MapStructs.INSTANCE::po2vo);
     }
 }
 

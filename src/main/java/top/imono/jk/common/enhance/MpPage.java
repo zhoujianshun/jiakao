@@ -42,6 +42,7 @@ public class MpPage<T> extends Page<T> {
 
         PageVo<V> vo = new PageVo<>();
         List<T> records = getRecords();
+        // T 转为 V
         List<V> list = records.stream().map(function).toList();
         vo.setData(list);
         vo.setTotalCount(getTotal());

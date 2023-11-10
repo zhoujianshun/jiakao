@@ -19,6 +19,6 @@ public class LoginReqVo {
 //    @NotBlank(message = "验证码不能为空")
 //    private String captcha;
 
-    @Schema(description="记住密码")
-    private boolean rememberMe;
+//    @Schema(description="记住密码")
+//    private boolean rememberMe;
 }

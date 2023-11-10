@@ -3,6 +3,7 @@ package top.imono.jk.common.mapStruct;
 
 import org.mapstruct.Mapper;
 //import org.mapstruct.Mapping;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import top.imono.jk.pojo.po.*;
 import top.imono.jk.pojo.vo.req.save.ExamPlaceCourseReqVo;
@@ -34,9 +35,9 @@ public interface MapStructs {
     PlateRegionVo po2vo(PlateRegion po);
 //    SysResourceVo po2vo(SysResource po);
 //    SysRoleVo po2vo(SysRole po);
-//    @Mapping(source = "loginTime",
-//            target = "loginTime",
-//            qualifiedBy = Date2Millis.class)
-//    SysUserVo po2vo(SysUser po);
+    @Mapping(source = "loginTime",
+            target = "loginTime",
+            qualifiedBy = Date2MillisFormatter.Date2Millis.class)
+    SysUserVo po2vo(SysUser po);
     LoginVo po2loginVo(SysUser po);
 }

@@ -1,18 +1,21 @@
 package top.imono.jk.pojo.po;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
 import java.util.Date;
+
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
  * 用户（可以登录后台系统的）
+ *
  * @TableName sys_user
  */
-@TableName(value ="sys_user")
+@Schema(description = "用户信息")
+@TableName(value = "sys_user")
 @Data
 public class SysUser implements Serializable {
     /**
@@ -24,6 +27,7 @@ public class SysUser implements Serializable {
     /**
      * 昵称
      */
+    @Schema(description = "用户名")
     @TableField(value = "nickname")
     private String nickname;
 
@@ -57,6 +61,12 @@ public class SysUser implements Serializable {
     @TableField(value = "status")
     private Integer status;
 
+    @Hidden
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
+
+    @Hidden
+    @TableLogic(value = "0", delval = "1") // 局部配置逻辑删除
+    @TableField(select = false)
+    private short isDeleted;
 }
