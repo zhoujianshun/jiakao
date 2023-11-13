@@ -10,7 +10,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import top.imono.jk.common.enhance.MpLambdaQueryWrapper;
 import top.imono.jk.common.enhance.MpPage;
-import top.imono.jk.common.jwt.JwtUtil;
+import top.imono.jk.common.utils.JwtUtil;
 import top.imono.jk.common.mapStruct.MapStructs;
 import top.imono.jk.common.utils.JsonVos;
 import top.imono.jk.pojo.dto.SysUserDto;
@@ -23,15 +23,12 @@ import top.imono.jk.pojo.vo.resp.PageVo;
 import top.imono.jk.pojo.vo.resp.SysUserVo;
 import top.imono.jk.service.SysResourceService;
 import top.imono.jk.service.SysRoleService;
-import top.imono.jk.service.SysUserRoleService;
 import top.imono.jk.service.SysUserService;
 import top.imono.jk.mapper.SysUserMapper;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import top.imono.jk.common.utils.Constants;

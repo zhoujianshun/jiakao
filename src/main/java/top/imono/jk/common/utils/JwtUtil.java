@@ -1,4 +1,4 @@
-package top.imono.jk.common.jwt;
+package top.imono.jk.common.utils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -11,8 +11,6 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import top.imono.jk.common.exception.CommonException;
-import top.imono.jk.common.utils.JsonVos;
 import top.imono.jk.pojo.result.CodeMsg;
 
 import javax.crypto.SecretKey;

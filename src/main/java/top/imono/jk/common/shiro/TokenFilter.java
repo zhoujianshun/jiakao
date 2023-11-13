@@ -1,19 +1,14 @@
 package top.imono.jk.common.shiro;
 
 
-import jakarta.annotation.Resource;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.web.filter.AccessControlFilter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import top.imono.jk.common.jwt.JwtToken;
-import top.imono.jk.common.jwt.JwtUtil;
+import top.imono.jk.common.utils.JwtUtil;
 import top.imono.jk.common.utils.JsonVos;
 import top.imono.jk.pojo.result.CodeMsg;
 

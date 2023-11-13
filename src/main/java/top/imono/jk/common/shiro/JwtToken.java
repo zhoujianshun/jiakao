@@ -1,7 +1,8 @@
-package top.imono.jk.common.jwt;
+package top.imono.jk.common.shiro;
 
 import lombok.Data;
 import org.apache.shiro.authc.AuthenticationToken;
+import top.imono.jk.common.utils.JwtUtil;
 
 /**
  * 继承AuthenticationToken，跟TokenRealmh中的doGetAuthenticationInfo的参数类型保持一致
