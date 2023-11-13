@@ -6,26 +6,31 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import top.imono.jk.common.enhance.MpLambdaQueryWrapper;
 import top.imono.jk.common.enhance.MpPage;
 import top.imono.jk.common.jwt.JwtUtil;
 import top.imono.jk.common.mapStruct.MapStructs;
 import top.imono.jk.common.utils.JsonVos;
-import top.imono.jk.pojo.po.DictItem;
-import top.imono.jk.pojo.po.SysUser;
+import top.imono.jk.pojo.dto.SysUserDto;
+import top.imono.jk.pojo.po.*;
 import top.imono.jk.pojo.result.CodeMsg;
 import top.imono.jk.pojo.vo.req.LoginReqVo;
 import top.imono.jk.pojo.vo.req.list.SysUserPageReqVo;
 import top.imono.jk.pojo.vo.resp.LoginVo;
 import top.imono.jk.pojo.vo.resp.PageVo;
 import top.imono.jk.pojo.vo.resp.SysUserVo;
+import top.imono.jk.service.SysResourceService;
+import top.imono.jk.service.SysRoleService;
+import top.imono.jk.service.SysUserRoleService;
 import top.imono.jk.service.SysUserService;
 import top.imono.jk.mapper.SysUserMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -45,6 +50,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private RedisTemplate<String, Object> redisTemplate;
     @Autowired
     private RedisTemplate<String, String> stringRedisTemplate;
+
+    @Autowired
+    private SysRoleService sysRoleService;
+
+    @Autowired
+    private SysResourceService sysResourceService;
 
     @Override
     public LoginVo login(LoginReqVo loginReqVo, HttpServletResponse response) {
@@ -66,12 +77,25 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         user.setLoginTime(new Date());
         baseMapper.updateById(user);
 
+        SysUserDto sysUserDto = new SysUserDto();
+        sysUserDto.setUser(user);
+        List<SysRole> sysRoles = sysRoleService.listByUserId(user.getId());
+        if (!CollectionUtils.isEmpty(sysRoles)) {
+            sysUserDto.setRoles(sysRoles);
+            List<Integer> roleIds = sysRoles.stream().map(SysRole::getId).toList();
+            List<SysResource> sysResources = sysResourceService.listByRoleIds(roleIds);
+            sysUserDto.setResources(sysResources);
+        }
+
         // 生成token
         String token = jwtUtil.generateToken(user.getUsername(), user.getId().toString());
         response.setHeader(JwtUtil.HEADER, token);
         response.setHeader("Access-control-Expost-Headers", JwtUtil.HEADER);
         // 放入缓存
         stringRedisTemplate.boundValueOps("token_" + user.getId()).set(token, JwtUtil.EXPIRE, TimeUnit.MINUTES);
+        // 保存权限信息，避免在接口查询的时候时，为验证权限多次查询数据库
+        redisTemplate.boundValueOps("user_" + user.getId()).set(sysUserDto, JwtUtil.EXPIRE, TimeUnit.MINUTES);
+
 //        redisTemplate.boundValueOps("user_" + user.getId()).set(user, 1, TimeUnit.MINUTES);
 //        String test = stringRedisTemplate.boundValueOps("test").get();
 //        log.debug(test + "");
@@ -93,6 +117,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             return JsonVos.raise(CodeMsg.BAD_REQUEST);
         }
         stringRedisTemplate.delete("token_" + userId);
+        redisTemplate.delete("user_" + userId);
+
         return true;
     }
 

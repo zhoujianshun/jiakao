@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import org.apache.shiro.authz.AuthorizationException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindException;
@@ -51,6 +52,9 @@ public class ExceptionInterceptor {
             List<String> defaultMsg = cve.getConstraintViolations().stream().map(ConstraintViolation::getMessage).toList();
             String msg = StringUtils.collectionToDelimitedString(defaultMsg, ",");
             return JsonVos.error(msg);
+        } else if (t instanceof AuthorizationException) {
+            response.setStatus(HttpStatus.FORBIDDEN.value());
+            return JsonVos.error(CodeMsg.NO_PERMISSION);
         }
 
         // 处理其他异常

@@ -7,17 +7,17 @@ import lombok.Data;
 import top.imono.jk.common.foreign.anno.ForeignField;
 
 /**
- * 用户-角色
- * @TableName sys_user_role
+ * 角色-资源
+ * @TableName sys_role_resource
  */
-@TableName(value ="sys_user_role")
+@TableName(value ="sys_role_resource")
 @Data
-public class SysUserRole implements Serializable {
+public class SysRoleResource implements Serializable {
     /**
-     * 用户id
+     * 资源id
      */
-    @ForeignField(SysUser.class)
-    private Integer userId;
+    @ForeignField(SysResource.class)
+    private Integer resourceId;
 
     /**
      * 角色id

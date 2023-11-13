@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.imono.jk.mapper.SysResourceMapper">
+
+    <resultMap id="BaseResultMap" type="top.imono.jk.pojo.po.SysResource">
+            <id property="id" column="id" jdbcType="TINYINT"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="uri" column="uri" jdbcType="VARCHAR"/>
+            <result property="permission" column="permission" jdbcType="VARCHAR"/>
+            <result property="type" column="type" jdbcType="TINYINT"/>
+            <result property="icon" column="icon" jdbcType="VARCHAR"/>
+            <result property="sn" column="sn" jdbcType="TINYINT"/>
+            <result property="parentId" column="parent_id" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,uri,
+        permission,type,icon,
+        sn,parent_id
+    </sql>
+</mapper>

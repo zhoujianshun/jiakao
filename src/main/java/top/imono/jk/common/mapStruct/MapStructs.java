@@ -34,7 +34,7 @@ public interface MapStructs {
     ExamPlaceCourseVo po2vo(ExamPlaceCourse po);
     PlateRegionVo po2vo(PlateRegion po);
 //    SysResourceVo po2vo(SysResource po);
-//    SysRoleVo po2vo(SysRole po);
+    SysRoleVo po2vo(SysRole po);
     @Mapping(source = "loginTime",
             target = "loginTime",
             qualifiedBy = Date2MillisFormatter.Date2Millis.class)
