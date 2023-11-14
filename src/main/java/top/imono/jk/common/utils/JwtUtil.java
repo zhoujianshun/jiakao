@@ -30,7 +30,7 @@ public class JwtUtil {
     /**
      * 生成jwt token
      */
-    public String generateToken(String username, String id) {
+    public String generateToken(String username) {
         SecretKey signingKey = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
         //过期时间
         LocalDateTime tokenExpirationTime = LocalDateTime.now().plusMinutes(EXPIRE);
@@ -39,7 +39,7 @@ public class JwtUtil {
                 .issuedAt(Timestamp.valueOf(LocalDateTime.now()))
                 .subject("user")
                 .expiration(Timestamp.valueOf(tokenExpirationTime))
-                .claims(Map.of("username", username, "id", id))
+                .claims(Map.of("username", username))
                 .signWith(signingKey, Jwts.SIG.HS512)
                 .compact();
     }
@@ -110,7 +110,7 @@ public class JwtUtil {
 
     public static void main(String[] args) {
         JwtUtil jwtUtil = new JwtUtil();
-        String token = jwtUtil.generateToken("admin", "222");
+        String token = jwtUtil.generateToken("admin");
         token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2OTkyNDI2NjUsInN1YiI6InVzZXIiLCJ4eCI6IjExMSIsImV4cCI6MTY5OTI0MjcyNSwidXNlcm5hbWUiOiJhZG1pbiIsImlkIjoiMSJ9.u-kRFt2cWxHOqbmaxKG8f2e6IgeLbudO6J0aO65q5SLU7gaL2myRR9-0t7zKD09DeRV8NdlP4UaFQ_ltgqy8yA";
         // token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2OTkyNDI3ODcsInN1YiI6InVzZXIiLCJ4eCI6IjExMSIsImV4cCI6MTY5OTg0NzY0NywidXNlcm5hbWUiOiJhZG1pbiIsImlkIjoiMSJ9.g1Xi-zkRSktD814cI2zehPS0SEpRgEjOijvi8qbfwpOuKAW4aK8Ank5xZqSZ-5Z3FIXudvybCd5kkKS0DJRrSA";
         System.out.println("token = " + token);

@@ -17,7 +17,6 @@ import java.io.IOException;
 @Slf4j
 public class TokenFilter extends AccessControlFilter {
 
-
     /**
      * true表示允许通过，进入下一个链条调用
      * false表示不允许访问，会调用onAccessDenied方法，不会进入下一个链条调用
@@ -34,9 +33,15 @@ public class TokenFilter extends AccessControlFilter {
          */
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         log.debug("TokenFilter - isAccessAllowed - " + request.getRequestURI());
+        String requestURI = request.getRequestURI();
+        //  1.匹配requestURI，匹配上登录不登录都能调用的接口路径
+        //  if(){
+        //  2.判断header中，是否有token。
+        //      2.1有，返回false，进入token验证
+        //      2.2没有，返回true，允许通过，进入下一个链条调用
+        //  }
         return false;
     }
-
 
     /**
      * isAccessAllowed false时调用
@@ -85,9 +90,9 @@ public class TokenFilter extends AccessControlFilter {
     }
 
     //登录失败要执行的方法
-    private void onLoginFail(ServletResponse response) throws IOException {
-        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-        httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        httpServletResponse.getWriter().print("login error");
-    }
+//    private void onLoginFail(ServletResponse response) throws IOException {
+//        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+//        httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//        httpServletResponse.getWriter().print("login error");
+//    }
 }

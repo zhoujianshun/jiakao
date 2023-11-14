@@ -62,26 +62,28 @@ public class TokenRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        String jwtToken = (String) authenticationToken.getCredentials();
+        JwtToken jwtToken = (JwtToken) authenticationToken;
         log.debug("TokenRealm - doGetAuthorizationInfo - {}", jwtToken);
 
+        String token = jwtToken.getToken();
         // token是否有效
-        jwtUtil.isVerify(jwtToken);
+        jwtUtil.isVerify(token);
+        String username = jwtToken.getUsername();
 
-        Claims claims = jwtUtil.getClaimsByToken(jwtToken);
-        // 获取jwt中关于用户名
-        String id = (String) claims.get("id");
+//        Claims claims = jwtUtil.getClaimsByToken(jwtToken);
+//        // 获取jwt中关于用户名
+//        String id = (String) claims.get("id");
         // 获取缓存中的token
-        String cacheToken = stringRedisTemplate.boundValueOps("token_" + id).get();
+        String cacheToken = stringRedisTemplate.boundValueOps("token_" + username).get();
 
         if (cacheToken == null) {
             return JsonVos.raise(CodeMsg.TOKEN_EXPIRED);
-        } else if (!jwtToken.equals(cacheToken)) {
+        } else if (!token.equals(cacheToken)) {
             return JsonVos.raise(CodeMsg.LOGIN_OTHER_DEVICE);
         }
 
         // 查询用户
-        SysUser user = userService.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getId, id));
+        SysUser user = userService.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, username));
         if (user == null) {
             return JsonVos.raise(CodeMsg.WRONG_USERNAME);
         }

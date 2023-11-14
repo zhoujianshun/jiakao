@@ -83,15 +83,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             List<SysResource> sysResources = sysResourceService.listByRoleIds(roleIds);
             sysUserDto.setResources(sysResources);
         }
-
+        String username = user.getUsername();
         // 生成token
-        String token = jwtUtil.generateToken(user.getUsername(), user.getId().toString());
-        response.setHeader(JwtUtil.HEADER, token);
-        response.setHeader("Access-control-Expost-Headers", JwtUtil.HEADER);
+        String token = jwtUtil.generateToken(username);
+//        response.setHeader(JwtUtil.HEADER, token);
+//        response.setHeader("Access-control-Expost-Headers", JwtUtil.HEADER);
         // 放入缓存
-        stringRedisTemplate.boundValueOps("token_" + user.getId()).set(token, JwtUtil.EXPIRE, TimeUnit.MINUTES);
+        stringRedisTemplate.boundValueOps("token_" + username).set(token, JwtUtil.EXPIRE, TimeUnit.MINUTES);
         // 保存权限信息，避免在接口查询的时候时，为验证权限多次查询数据库
-        redisTemplate.boundValueOps("user_" + user.getId()).set(sysUserDto, JwtUtil.EXPIRE, TimeUnit.MINUTES);
+        redisTemplate.boundValueOps("user_" + username).set(sysUserDto, JwtUtil.EXPIRE, TimeUnit.MINUTES);
 
 //        redisTemplate.boundValueOps("user_" + user.getId()).set(user, 1, TimeUnit.MINUTES);
 //        String test = stringRedisTemplate.boundValueOps("test").get();
