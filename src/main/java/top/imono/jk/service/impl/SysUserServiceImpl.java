@@ -10,6 +10,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import top.imono.jk.common.enhance.MpLambdaQueryWrapper;
 import top.imono.jk.common.enhance.MpPage;
+import top.imono.jk.common.shiro.JwtToken;
 import top.imono.jk.common.utils.JwtUtil;
 import top.imono.jk.common.mapStruct.MapStructs;
 import top.imono.jk.common.utils.JsonVos;
@@ -109,12 +110,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (!StringUtils.hasLength(token)) {
             return JsonVos.raise(CodeMsg.NO_TOKEN);
         }
-        String userId = jwtUtil.getClaimFiled(token, "id");
-        if (userId == null) {
+        JwtToken jwtToken = new JwtToken(token);
+//        String userId = jwtUtil.getClaimFiled(token, "id");
+        String username = jwtToken.getUsername();
+        if (username == null) {
             return JsonVos.raise(CodeMsg.BAD_REQUEST);
         }
-        stringRedisTemplate.delete("token_" + userId);
-        redisTemplate.delete("user_" + userId);
+        stringRedisTemplate.delete("token_" + username);
+        redisTemplate.delete("user_" + username);
 
         return true;
     }
