@@ -56,7 +56,10 @@ public class WebCfg implements WebMvcConfigurer {
         registry.addInterceptor(new SaInterceptor(handler -> {
                     SaRouter
                             .match("/**")
-                            .notMatch("/user/login", "/user/logout")
+                            .notMatch("/user/login",
+                                                "/user/logout",
+                                                "/swagger-ui/**",
+                                                "/v3/api-docs/**")
                             .check(r -> StpUtil.checkLogin());
 
                     SaRouter.match("/sysUsers/**", r -> StpUtil.checkPermission("sysUser"));
