@@ -20,7 +20,7 @@
 
 ##### api文档输出：SpringDoc
 
-##### 安全管理框架：Shiro
+##### 权限认证框架：Sa-Token
 
 ##### mybatis增强：MyBatis Plus
 
