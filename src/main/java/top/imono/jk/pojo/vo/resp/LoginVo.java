@@ -17,4 +17,7 @@ public class LoginVo {
 
     @Schema(description = "访问令牌")
     private String token;
+
+    @Schema(description = "访问令牌名称")
+    private String tokenName;
 }

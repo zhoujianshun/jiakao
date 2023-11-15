@@ -1,5 +1,8 @@
 package top.imono.jk.common.cfg;
 
+import cn.dev33.satoken.interceptor.SaInterceptor;
+import cn.dev33.satoken.router.SaRouter;
+import cn.dev33.satoken.stp.StpUtil;
 import jakarta.servlet.Filter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -7,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import top.imono.jk.common.prop.JkProperties;
 import top.imono.jk.filter.ErrorFilter;
@@ -41,5 +45,24 @@ public class WebCfg implements WebMvcConfigurer {
         // 最高权限
         bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return bean;
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        WebMvcConfigurer.super.addInterceptors(registry);
+
+        // 参考：https://sa-token.cc/doc.html#/use/route-check
+        // 注册 Sa-Token 拦截器，打开路由式鉴权功能
+        registry.addInterceptor(new SaInterceptor(handler -> {
+                    SaRouter
+                            .match("/**")
+                            .notMatch("/user/login", "/user/logout")
+                            .check(r -> StpUtil.checkLogin());
+
+                    SaRouter.match("/sysUsers/**", r -> StpUtil.checkPermission("sysUser"));
+                    // SaRouter.match("/sysUsers/**", r -> StpUtil.checkRole("总经理"));
+
+                }).isAnnotation(false) // 指定关闭掉注解鉴权能力，这样框架就只会做路由拦截校验了
+        ).addPathPatterns("/**");
     }
 }

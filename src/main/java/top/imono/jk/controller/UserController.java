@@ -1,5 +1,7 @@
 package top.imono.jk.controller;
 
+import cn.dev33.satoken.annotation.SaIgnore;
+import cn.dev33.satoken.stp.StpUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,10 +34,16 @@ public class UserController {
         return JsonVos.success(service.login(loginVo, response));
     }
 
+    @RequestMapping("isLogin")
+    public DataJsonVo<String> isLogin() {
+        return JsonVos.success("是否登录：" + StpUtil.isLogin() + " " + StpUtil.getTokenInfo());
+    }
+
     @PostMapping("/logout")
     @SecurityRequirements() // 设置文档中不需要auth验证
     @Operation(summary = "登出")
     public DataJsonVo<Boolean> logout(HttpServletRequest request) {
-        return JsonVos.success(service.logout(request));
+        return JsonVos.success(service.logout(request)
+        );
     }
 }

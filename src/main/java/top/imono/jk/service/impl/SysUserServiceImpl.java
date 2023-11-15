@@ -1,5 +1,7 @@
 package top.imono.jk.service.impl;
 
+import cn.dev33.satoken.stp.SaTokenInfo;
+import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -10,7 +12,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import top.imono.jk.common.enhance.MpLambdaQueryWrapper;
 import top.imono.jk.common.enhance.MpPage;
-import top.imono.jk.common.utils.JwtUtil;
 import top.imono.jk.common.mapStruct.MapStructs;
 import top.imono.jk.common.utils.JsonVos;
 import top.imono.jk.pojo.dto.SysUserDto;
@@ -41,8 +42,7 @@ import top.imono.jk.common.utils.Constants;
 @Service
 @Slf4j
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
-    @Autowired
-    private JwtUtil jwtUtil;
+
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
     @Autowired
@@ -74,6 +74,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         user.setLoginTime(new Date());
         baseMapper.updateById(user);
 
+        Integer id = user.getId();
+        StpUtil.login(id);
+        String tokenValue = StpUtil.getTokenValue();
+        String tokenName = StpUtil.getTokenName();
         SysUserDto sysUserDto = new SysUserDto();
         sysUserDto.setUser(user);
         List<SysRole> sysRoles = sysRoleService.listByUserId(user.getId());
@@ -83,39 +87,50 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             List<SysResource> sysResources = sysResourceService.listByRoleIds(roleIds);
             sysUserDto.setResources(sysResources);
         }
-        String username = user.getUsername();
-        // 生成token
-        String token = jwtUtil.generateToken(username);
-//        response.setHeader(JwtUtil.HEADER, token);
-//        response.setHeader("Access-control-Expost-Headers", JwtUtil.HEADER);
-        // 放入缓存
-        stringRedisTemplate.boundValueOps("token_" + username).set(token, JwtUtil.EXPIRE, TimeUnit.MINUTES);
-        // 保存权限信息，避免在接口查询的时候时，为验证权限多次查询数据库
-        redisTemplate.boundValueOps("user_" + username).set(sysUserDto, JwtUtil.EXPIRE, TimeUnit.MINUTES);
+        redisTemplate.boundValueOps("userDto:" + id).set(sysUserDto, StpUtil.getSessionTimeout(), TimeUnit.SECONDS);
 
-//        redisTemplate.boundValueOps("user_" + user.getId()).set(user, 1, TimeUnit.MINUTES);
-//        String test = stringRedisTemplate.boundValueOps("test").get();
-//        log.debug(test + "");
+//        String username = user.getUsername();
+//        // 生成token
+//        String token = jwtUtil.generateToken(username);
+//        // 放入缓存
+//        stringRedisTemplate.boundValueOps("token_" + username).set(token, JwtUtil.EXPIRE, TimeUnit.MINUTES);
+//        // 保存权限信息，避免在接口查询的时候时，为验证权限多次查询数据库
+//        redisTemplate.boundValueOps("user_" + username).set(sysUserDto, JwtUtil.EXPIRE, TimeUnit.MINUTES);
 
-//        EhCaches.tokenPut(token, user);
         LoginVo vo = MapStructs.INSTANCE.po2loginVo(user);
-        vo.setToken(token);
+        vo.setToken(tokenValue);
+        vo.setTokenName(tokenName);
         return vo;
     }
 
     @Override
     public Boolean logout(HttpServletRequest request) {
-        String token = JwtUtil.getTokenFromRequest(request);
-        if (!StringUtils.hasLength(token)) {
-            return JsonVos.raise(CodeMsg.NO_TOKEN);
-        }
-        String userId = jwtUtil.getClaimFiled(token, "id");
-        if (userId == null) {
-            return JsonVos.raise(CodeMsg.BAD_REQUEST);
-        }
-        stringRedisTemplate.delete("token_" + userId);
-        redisTemplate.delete("user_" + userId);
-
+//        String token = JwtUtil.getTokenFromRequest(request);
+//        if (!StringUtils.hasLength(token)) {
+//            return JsonVos.raise(CodeMsg.NO_TOKEN);
+//        }
+//        String userId = jwtUtil.getClaimFiled(token, "id");
+//        if (userId == null) {
+//            return JsonVos.raise(CodeMsg.BAD_REQUEST);
+//        }
+//        stringRedisTemplate.delete("token_" + userId);
+//        redisTemplate.delete("user_" + userId);
+       try{
+           StpUtil.checkLogin();
+           Object loginId = StpUtil.getLoginId();
+           StpUtil.logout();
+           redisTemplate.delete("userDto:" + loginId);
+       }catch(Exception ignored){
+           // 处理token不合法、没有token的情况
+           log.debug("not login");
+       }
+//        if(StpUtil.isLogin()){
+//            Object loginId = StpUtil.getLoginId();
+//            StpUtil.logout();
+//            redisTemplate.delete("user_" + loginId);
+//        }else{
+//            log.debug("not login");
+//        }
         return true;
     }
 

@@ -1,11 +1,12 @@
 package top.imono.jk.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.annotation.SaCheckRole;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import top.imono.jk.common.utils.Constants;
@@ -27,16 +28,16 @@ public class SysUserController {
     @Autowired
     private SysUserService service;
 
+//    @SaCheckPermission("sysUser.list")
     @GetMapping
     @Operation(description = "分页查询用户")
-    @RequiresPermissions(Constants.Permisson.SYS_USER_LIST)
     public ListJsonVo<SysUserVo> list(SysUserPageReqVo reqVo) {
         return JsonVos.success(service.list(reqVo));
     }
 
+//    @SaCheckRole("总经理")
     @Operation(summary = "删除")
     @DeleteMapping("/{ids}")
-    @RequiresPermissions(Constants.Permisson.SYS_USER_REMOVE)
     public JsonVo delete(@Parameter(description = "需要删除的id，多个id可以使用','隔开") @PathVariable String ids) {
         boolean result = service.removeByIds(Arrays.stream(ids.split(",")).toList());
         if (result) {

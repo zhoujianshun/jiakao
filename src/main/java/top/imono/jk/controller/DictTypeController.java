@@ -1,5 +1,6 @@
 package top.imono.jk.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -27,6 +28,7 @@ public class DictTypeController extends BaseController<DictType, DictTypeReqVo> 
     @Autowired
     private DictTypeService service;
 
+    @SaCheckLogin
     @Operation(summary = "查询数据字典类型", description = "管理员访问", security = @SecurityRequirement(name = "authScheme"))
     @GetMapping
     public ListJsonVo<DictTypeVo> list(@Valid DictTypePageReqVo dictTypeQuery) {
